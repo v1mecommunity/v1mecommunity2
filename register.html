@@ -749,15 +749,27 @@ async function submitRegistration(event) {
     // ПОМИЛКА
     // ======================================
 
-   if (error) {
+   
+if (error) {
 
-    console.error("ПОВНА ПОМИЛКА SUPABASE:", error);
+    console.log("SUPABASE ERROR OBJECT:", error);
+    console.log("MESSAGE:", error.message);
+    console.log("DETAILS:", error.details);
+    console.log("HINT:", error.hint);
+    console.log("CODE:", error.code);
 
-    errorMessage.textContent =
-        `❌ ${error.message || "Невідома помилка"}`;
+    errorMessage.innerHTML = `
+        <strong>Помилка Supabase:</strong><br><br>
+        Code: ${error.code || "немає"}<br>
+        Message: ${error.message || "немає"}<br>
+        Details: ${error.details || "немає"}<br>
+        Hint: ${error.hint || "немає"}
+    `;
 
-    errorMessage.style.display =
-        "block";
+    errorMessage.style.display = "block";
+
+    submitButton.disabled = false;
+    submitButton.textContent = "Подати заявку";
 
     return;
 }
