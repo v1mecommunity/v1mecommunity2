@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Рейтинг — V1ME Community</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            background: #0b0b10;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        .ranking-page {
+            max-width: 1000px;
+            margin: auto;
+            padding: 60px 20px;
+        }
+
+        .title {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #888;
+            margin-bottom: 40px;
+        }
+
+        .ranking {
+            background: #15151d;
+            border: 1px solid #292936;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .ranking-header,
+        .ranking-row {
+            display: grid;
+            grid-template-columns: 70px 1fr 120px 120px;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .ranking-header {
+            color: #888;
+            font-size: 13px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #292936;
+        }
+
+        .ranking-row {
+            border-bottom: 1px solid #292936;
+            transition: 0.2s;
+        }
+
+        .ranking-row:last-child {
+            border-bottom: none;
+        }
+
+        .ranking-row:hover {
+            background: #1b1b25;
+        }
+
+        .position {
+            font-size: 22px;
+            font-weight: 900;
+            color: #888;
+        }
+
+        .team-name {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .tag {
+            color: #a855f7;
+            font-size: 13px;
+        }
+
+        .points {
+            font-weight: 800;
+            color: #a855f7;
+        }
+
+        .wins {
+            color: #aaa;
+        }
+
+        @media (max-width: 700px) {
+
+            .title {
+                font-size: 32px;
+            }
+
+            .ranking-header,
+            .ranking-row {
+                grid-template-columns: 45px 1fr 80px;
+                padding: 15px;
+            }
+
+            .ranking-header div:nth-child(4),
+            .ranking-row div:nth-child(4) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="container header-content">
+
+        <a href="index.html" class="logo">
+            <span>V1ME</span>
+            <small>COMMUNITY</small>
+        </a>
+
+        <nav class="nav">
+            <a href="index.html">
+                ← Головна
+            </a>
+        </nav>
+
+        <a
+            href="https://discord.gg/7t8vAnn3n"
+            class="discord-button"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            Discord
+        </a>
+
+    </div>
+</header>
+
+<div class="ranking-page">
+
+    <h1 class="title">Рейтинг команд</h1>
+
+    <p class="subtitle">
+        Поточний рейтинг V1ME Community
+    </p>
+
+
+    <div class="ranking">
+
+        <div class="ranking-header">
+            <div>#</div>
+            <div>Команда</div>
+            <div>Очки</div>
+            <div>Перемоги</div>
+        </div>
+
+
+        <div class="ranking-row">
+
+            <div class="position">1</div>
+
+            <div>
+                <div class="team-name">
+                    SavageHawks
+                </div>
+
+                <div class="tag">
+                    SH
+                </div>
+            </div>
+
+            <div class="points">
+                1250
+            </div>
+
+            <div class="wins">
+                8
+            </div>
+
+        </div>
+
+
+        <div class="ranking-row">
+
+            <div class="position">2</div>
+
+            <div>
+                <div class="team-name">
+                    PARADOX
+                </div>
+
+                <div class="tag">
+                    PX
+                </div>
+            </div>
+
+            <div class="points">
+                1120
+            </div>
+
+            <div class="wins">
+                7
+            </div>
+
+        </div>
+
+
+        <div class="ranking-row">
+
+            <div class="position">3</div>
+
+            <div>
+                <div class="team-name">
+                    Nexus
+                </div>
+
+                <div class="tag">
+                    NX
+                </div>
+            </div>
+
+            <div class="points">
+                980
+            </div>
+
+            <div class="wins">
+                6
+            </div>
+
+        </div>
+
+
+        <div class="ranking-row">
+
+            <div class="position">4</div>
+
+            <div>
+                <div class="team-name">
+                    Blaze
+                </div>
+
+                <div class="tag">
+                    BZ
+                </div>
+            </div>
+
+            <div class="points">
+                900
+            </div>
+
+            <div class="wins">
+                5
+            </div>
+
+        </div>
+
+
+        <div class="ranking-row">
+
+            <div class="position">5</div>
+
+            <div>
+                <div class="team-name">
+                    Blaze Purple
+                </div>
+
+                <div class="tag">
+                    BP
+                </div>
+            </div>
+
+            <div class="points">
+                760
+            </div>
+
+            <div class="wins">
+                4
+            </div>
+
+        </div>
+
+
+        <div class="ranking-row">
+
+            <div class="position">6</div>
+
+            <div>
+                <div class="team-name">
+                    Point No Return
+                </div>
+
+                <div class="tag">
+                    PNR
+                </div>
+            </div>
+
+            <div class="points">
+                650
+            </div>
+
+            <div class="wins">
+                3
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

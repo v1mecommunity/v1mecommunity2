@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Матчі — V1ME Community</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <style>
+
+        body {
+            background: #0b0b10;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        .matches-container {
+            max-width: 1150px;
+            margin: auto;
+            padding: 60px 20px;
+        }
+
+        /* =========================
+           TITLE
+        ========================= */
+
+        .page-title {
+            font-size: 42px;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .page-description {
+            color: #888;
+            margin-bottom: 30px;
+        }
+
+        /* =========================
+           FILTERS
+        ========================= */
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .filter-button {
+            background: #15151d;
+            color: #999;
+
+            border: 1px solid #292936;
+            border-radius: 9px;
+
+            padding: 10px 16px;
+
+            cursor: pointer;
+
+            font-size: 13px;
+            font-weight: 700;
+
+            transition: .2s;
+        }
+
+        .filter-button:hover {
+            color: white;
+            border-color: #5b4a82;
+        }
+
+        .filter-button.active {
+            color: white;
+            background: #211936;
+            border-color: #8b5cf6;
+        }
+
+        /* =========================
+           MATCHES
+        ========================= */
+
+        .matches {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .match-card {
+
+            position: relative;
+
+            background:
+                radial-gradient(
+                    circle at 100% 0%,
+                    rgba(139,92,246,.12),
+                    transparent 35%
+                ),
+                #15151d;
+
+            border: 1px solid #292936;
+            border-radius: 14px;
+
+            padding: 20px 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 25px;
+
+            transition: .2s;
+        }
+
+        .match-card:hover {
+            border-color: #8b5cf6;
+            transform: translateY(-2px);
+        }
+
+        /* =========================
+           LEFT SIDE
+        ========================= */
+
+        .match-main {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .teams {
+
+            display: flex;
+            align-items: center;
+
+            gap: 20px;
+
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .team {
+
+            max-width: 250px;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .team.winner {
+            color: #a855f7;
+        }
+
+        .score {
+
+            color: #a855f7;
+
+            font-size: 25px;
+            font-weight: 900;
+
+            white-space: nowrap;
+        }
+
+        .versus {
+
+            color: #666;
+
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        /* =========================
+           INFO
+        ========================= */
+
+        .match-info {
+
+            min-width: 220px;
+
+            text-align: right;
+        }
+
+        .tournament-name {
+
+            color: #888;
+
+            font-size: 13px;
+
+            margin-top: 6px;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .round-name {
+
+            color: #666;
+
+            font-size: 12px;
+
+            margin-top: 4px;
+        }
+
+        .match-date {
+
+            color: #777;
+
+            font-size: 12px;
+
+            margin-top: 5px;
+        }
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        .status {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+            font-size: 12px;
+
+            font-weight: 900;
+
+            text-transform: uppercase;
+        }
+
+        .status.live {
+            color: #22c55e;
+        }
+
+        .status.finished {
+            color: #777;
+        }
+
+        .status.upcoming {
+            color: #f59e0b;
+        }
+
+        /* =========================
+           EMPTY
+        ========================= */
+
+        .state-box {
+
+            background: #111117;
+
+            border: 1px dashed #292936;
+
+            border-radius: 14px;
+
+            padding: 55px 20px;
+
+            text-align: center;
+
+            color: #666;
+        }
+
+        .state-box strong {
+            color: #aaa;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .matches-container {
+                padding: 40px 15px;
+            }
+
+            .page-title {
+                font-size: 32px;
+            }
+
+            .match-card {
+
+                flex-direction: column;
+
+                align-items: stretch;
+
+                padding: 18px;
+            }
+
+            .teams {
+
+                justify-content: center;
+
+                gap: 10px;
+
+                font-size: 15px;
+            }
+
+            .team {
+                max-width: 120px;
+            }
+
+            .score {
+                font-size: 21px;
+            }
+
+            .match-info {
+
+                min-width: 0;
+
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+HEADER
+===================================================== -->
+
+<header class="header">
+
+    <div class="container header-content">
+
+        <a
+            href="index.html"
+            class="logo"
+        >
+
+            <span>
+                V1ME
+            </span>
+
+            <small>
+                COMMUNITY
+            </small>
+
+        </a>
+
+
+        <nav class="nav">
+
+            <a href="index.html">
+                ← Головна
+            </a>
+
+        </nav>
+
+
+        <a
+            href="https://discord.gg/7t8vAnn3n"
+            class="discord-button"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            Discord
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+CONTENT
+===================================================== -->
+
+<div class="matches-container">
+
+    <h1 class="page-title">
+        Матчі
+    </h1>
+
+
+    <p class="page-description">
+        Останні, поточні та майбутні матчі V1ME Community
+    </p>
+
+
+    <!-- =========================
+         FILTERS
+    ========================= -->
+
+    <div class="filters">
+
+        <button
+            class="filter-button active"
+            data-filter="all"
+            onclick="setFilter('all')"
+        >
+            Усі
+        </button>
+
+
+        <button
+            class="filter-button"
+            data-filter="live"
+            onclick="setFilter('live')"
+        >
+            🟢 LIVE
+        </button>
+
+
+        <button
+            class="filter-button"
+            data-filter="scheduled"
+            onclick="setFilter('scheduled')"
+        >
+            🟡 Скоро
+        </button>
+
+
+        <button
+            class="filter-button"
+            data-filter="finished"
+            onclick="setFilter('finished')"
+        >
+            Завершені
+        </button>
+
+    </div>
+
+
+    <!-- =========================
+         MATCH LIST
+    ========================= -->
+
+    <div
+        id="matches"
+        class="matches"
+    ></div>
+
+
+    <div
+        id="state"
+        class="state-box"
+    >
+        Завантаження матчів...
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+SUPABASE
+===================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+/* =====================================================
+SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+    "https://rfgsmiprdmlpximyeaoy.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_h9m8acjhlJEAETS7nJZU8g_8M29PNAS";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =====================================================
+GLOBAL
+===================================================== */
+
+let allMatches = [];
+
+let currentFilter = "all";
+
+
+/* =====================================================
+ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+        return "";
+    }
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+/* =====================================================
+STATUS TEXT
+===================================================== */
+
+function getStatusText(status) {
+
+    if (status === "live") {
+        return "● LIVE";
+    }
+
+    if (status === "finished") {
+        return "● Завершено";
+    }
+
+    return "● Скоро";
+
+}
+
+
+/* =====================================================
+STATUS CLASS
+===================================================== */
+
+function getStatusClass(status) {
+
+    if (status === "live") {
+        return "live";
+    }
+
+    if (status === "finished") {
+        return "finished";
+    }
+
+    return "upcoming";
+
+}
+
+
+/* =====================================================
+DATE
+===================================================== */
+
+function formatDate(date) {
+
+    if (!date) {
+        return "";
+    }
+
+
+    const d =
+        new Date(date);
+
+
+    return d.toLocaleDateString(
+        "uk-UA",
+        {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+/* =====================================================
+TIME
+===================================================== */
+
+function formatTime(time) {
+
+    if (!time) {
+        return "";
+    }
+
+
+    /*
+        PostgreSQL time може
+        приходити як:
+
+        19:00:00
+    */
+
+    return time.substring(
+        0,
+        5
+    );
+
+}
+
+
+/* =====================================================
+LOAD MATCHES
+===================================================== */
+
+async function loadMatches() {
+
+    const matchesContainer =
+        document.getElementById(
+            "matches"
+        );
+
+
+    const state =
+        document.getElementById(
+            "state"
+        );
+
+
+    state.style.display =
+        "block";
+
+    matchesContainer.innerHTML =
+        "";
+
+
+    /*
+        Завантажуємо матчі.
+    */
+
+    const {
+        data: matches,
+        error: matchesError
+    } =
+        await supabaseClient
+            .from("matches")
+            .select("*")
+            .order(
+                "id",
+                {
+                    ascending: false
+                }
+            );
+
+
+    if (matchesError) {
+
+        state.innerHTML = `
+
+            Не вдалося завантажити матчі.
+
+            <br><br>
+
+            ${escapeHtml(
+                matchesError.message
+            )}
+
+        `;
+
+        return;
+    }
+
+
+    /*
+        Якщо матчів немає.
+    */
+
+    if (
+        !matches ||
+        !matches.length
+    ) {
+
+        state.innerHTML = `
+
+            Матчів поки немає.
+
+            <br><br>
+
+            Адміністратор може створити
+            перший матч у адмін-панелі.
+
+        `;
+
+        return;
+    }
+
+
+    /*
+        Зберігаємо глобально.
+    */
+
+    allMatches =
+        matches;
+
+
+    /*
+        Збираємо ID команд.
+    */
+
+    const teamIds = [];
+
+
+    matches.forEach(match => {
+
+        if (match.team1_id) {
+
+            teamIds.push(
+                match.team1_id
+            );
+
+        }
+
+        if (match.team2_id) {
+
+            teamIds.push(
+                match.team2_id
+            );
+
+        }
+
+    });
+
+
+    /*
+        Збираємо ID турнірів.
+    */
+
+    const tournamentIds = [];
+
+
+    matches.forEach(match => {
+
+        if (match.tournament_id) {
+
+            tournamentIds.push(
+                match.tournament_id
+            );
+
+        }
+
+    });
+
+
+    /*
+        Завантажуємо команди.
+    */
+
+    let teams = [];
+
+
+    if (teamIds.length) {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("teams")
+                .select("id,name")
+                .in(
+                    "id",
+                    [
+                        ...new Set(teamIds)
+                    ]
+                );
+
+
+        if (!error) {
+
+            teams =
+                data || [];
+
+        }
+
+    }
+
+
+    /*
+        Завантажуємо турніри.
+    */
+
+    let tournaments = [];
+
+
+    if (tournamentIds.length) {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("tournaments")
+                .select("id,name")
+                .in(
+                    "id",
+                    [
+                        ...new Set(
+                            tournamentIds
+                        )
+                    ]
+                );
+
+
+        if (!error) {
+
+            tournaments =
+                data || [];
+
+        }
+
+    }
+
+
+    /*
+        Робимо карти.
+    */
+
+    const teamMap = {};
+
+    teams.forEach(team => {
+
+        teamMap[team.id] =
+            team.name;
+
+    });
+
+
+    const tournamentMap = {};
+
+    tournaments.forEach(tournament => {
+
+        tournamentMap[
+            tournament.id
+        ] =
+            tournament.name;
+
+    });
+
+
+    /*
+        Зберігаємо карти
+        глобально для рендера.
+    */
+
+    window.teamMap =
+        teamMap;
+
+    window.tournamentMap =
+        tournamentMap;
+
+
+    renderMatches();
+
+}
+
+
+/* =====================================================
+RENDER
+===================================================== */
+
+function renderMatches() {
+
+    const container =
+        document.getElementById(
+            "matches"
+        );
+
+
+    const state =
+        document.getElementById(
+            "state"
+        );
+
+
+    let filtered =
+        allMatches;
+
+
+    /*
+        Фільтр.
+    */
+
+    if (
+        currentFilter !== "all"
+    ) {
+
+        filtered =
+            allMatches.filter(
+                match =>
+                    match.status ===
+                    currentFilter
+            );
+
+    }
+
+
+    /*
+        Немає матчів
+        після фільтра.
+    */
+
+    if (
+        !filtered.length
+    ) {
+
+        container.innerHTML =
+            "";
+
+        state.style.display =
+            "block";
+
+        state.innerHTML = `
+
+            Немає матчів
+            у цій категорії.
+
+        `;
+
+        return;
+    }
+
+
+    state.style.display =
+        "none";
+
+
+    /*
+        Створюємо картки.
+    */
+
+    container.innerHTML =
+        filtered
+            .map(
+                match => {
+
+                    const team1 =
+                        window.teamMap?.[
+                            match.team1_id
+                        ] ||
+                        "TBD";
+
+
+                    const team2 =
+                        window.teamMap?.[
+                            match.team2_id
+                        ] ||
+                        "TBD";
+
+
+                    const tournament =
+                        window.tournamentMap?.[
+                            match.tournament_id
+                        ] ||
+                        "Турнір";
+
+
+                    const team1Winner =
+                        match.winner_id &&
+                        String(
+                            match.winner_id
+                        ) ===
+                        String(
+                            match.team1_id
+                        );
+
+
+                    const team2Winner =
+                        match.winner_id &&
+                        String(
+                            match.winner_id
+                        ) ===
+                        String(
+                            match.team2_id
+                        );
+
+
+                    let scoreHtml;
+
+
+                    /*
+                        Якщо матч завершений
+                        або LIVE — показуємо
+                        рахунок.
+                    */
+
+                    if (
+                        match.status ===
+                            "finished" ||
+                        match.status ===
+                            "live"
+                    ) {
+
+                        scoreHtml = `
+
+                            <span
+                                class="score"
+                            >
+
+                                ${escapeHtml(
+                                    match.team1_score ??
+                                    0
+                                )}
+
+                                :
+
+                                ${escapeHtml(
+                                    match.team2_score ??
+                                    0
+                                )}
+
+                            </span>
+
+                        `;
+
+                    } else {
+
+                        scoreHtml = `
+
+                            <span
+                                class="score"
+                            >
+                                VS
+                            </span>
+
+                        `;
+
+                    }
+
+
+                    /*
+                        Дата + час.
+                    */
+
+                    let dateTime = "";
+
+
+                    if (
+                        match.match_date
+                    ) {
+
+                        dateTime +=
+                            formatDate(
+                                match.match_date
+                            );
+
+                    }
+
+
+                    if (
+                        match.match_time
+                    ) {
+
+                        if (
+                            dateTime
+                        ) {
+
+                            dateTime +=
+                                " • ";
+
+                        }
+
+                        dateTime +=
+                            formatTime(
+                                match.match_time
+                            );
+
+                    }
+
+
+                    return `
+
+                        <div
+                            class="match-card"
+                        >
+
+                            <div
+                                class="match-main"
+                            >
+
+                                <div
+                                    class="teams"
+                                >
+
+                                    <span
+                                        class="
+                                            team
+                                            ${
+                                                team1Winner
+                                                ?
+                                                "winner"
+                                                :
+                                                ""
+                                            }
+                                        "
+                                    >
+                                        ${escapeHtml(
+                                            team1
+                                        )}
+                                    </span>
+
+
+                                    ${scoreHtml}
+
+
+                                    <span
+                                        class="
+                                            team
+                                            ${
+                                                team2Winner
+                                                ?
+                                                "winner"
+                                                :
+                                                ""
+                                            }
+                                        "
+                                    >
+                                        ${escapeHtml(
+                                            team2
+                                        )}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div
+                                class="match-info"
+                            >
+
+                                <div
+                                    class="
+                                        status
+                                        ${getStatusClass(
+                                            match.status
+                                        )}
+                                    "
+                                >
+
+                                    ${getStatusText(
+                                        match.status
+                                    )}
+
+                                </div>
+
+
+                                <div
+                                    class="tournament-name"
+                                >
+
+                                    ${escapeHtml(
+                                        tournament
+                                    )}
+
+                                </div>
+
+
+                                <div
+                                    class="round-name"
+                                >
+
+                                    ${escapeHtml(
+                                        match.round ||
+                                        ""
+                                    )}
+
+                                </div>
+
+
+                                ${
+                                    dateTime
+                                    ?
+                                    `
+                                        <div
+                                            class="
+                                                match-date
+                                            "
+                                        >
+                                            ${escapeHtml(
+                                                dateTime
+                                            )}
+                                        </div>
+                                    `
+                                    :
+                                    ""
+                                }
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+}
+
+
+/* =====================================================
+FILTER
+===================================================== */
+
+function setFilter(filter) {
+
+    currentFilter =
+        filter;
+
+
+    /*
+        Активна кнопка.
+    */
+
+    document
+        .querySelectorAll(
+            ".filter-button"
+        )
+        .forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.filter ===
+                    filter
+            );
+
+        });
+
+
+    renderMatches();
+
+}
+
+
+/* =====================================================
+START
+===================================================== */
+
+loadMatches();
+
+
+/*
+    Автоматично оновлюємо
+    матчі кожні 30 секунд.
+
+    Тому якщо адмін змінить
+    рахунок або статус,
+    сторінка сама оновиться.
+*/
+
+setInterval(
+    loadMatches,
+    30000
+);
+
+</script>
+
+
+</body>
+
+</html>
+
+
+
+

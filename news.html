@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Новини — V1ME Community</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="container header-content">
+
+        <a href="index.html" class="logo">
+            <strong>V1ME</strong>
+            <span>COMMUNITY</span>
+        </a>
+
+        <nav class="nav">
+            <a href="index.html">Головна</a>
+            <a href="tournaments.html">Турніри</a>
+            <a href="bracket.html">Сітка</a>
+            <a href="matches.html">Матчі</a>
+            <a href="teams.html">Команди</a>
+            <a href="news.html" class="active">Новини</a>
+            <a href="register.html">Реєстрація</a>
+        </nav>
+
+        <a
+            href="https://discord.gg/7t8vAnn3n"
+            class="discord-button"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            Discord
+        </a>
+
+    </div>
+</header>
+
+
+<main>
+
+    <!-- PAGE HERO -->
+    <section class="page-hero">
+        <div class="container">
+
+            <div class="section-label">
+                V1ME COMMUNITY
+            </div>
+
+            <h1>Новини</h1>
+
+            <p>
+                Останні події, турніри, результати матчів
+                та новини V1ME Community.
+            </p>
+
+        </div>
+    </section>
+
+
+    <!-- NEWS -->
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-header">
+
+                <div>
+                    <div class="section-label">
+                        LATEST NEWS
+                    </div>
+
+                    <h2>
+                        Останні публікації
+                    </h2>
+                </div>
+
+            </div>
+
+
+            <div id="newsList" class="news-grid">
+
+                <div class="news-loading">
+                    Завантаження новин...
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- DISCORD CTA -->
+    <section class="cta">
+
+        <div class="container">
+
+            <div class="cta-box">
+
+                <div>
+
+                    <div class="section-label">
+                        JOIN THE COMMUNITY
+                    </div>
+
+                    <h2>
+                        Не пропускай новини
+                    </h2>
+
+                    <p>
+                        Приєднуйся до Discord V1ME Community,
+                        щоб бути в курсі турнірів та подій.
+                    </p>
+
+                </div>
+
+                <a
+                    href="https://discord.gg/7t8vAnn3n"
+                    class="button primary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Приєднатися до Discord
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer class="footer">
+
+    <div class="container footer-content">
+
+        <div class="logo">
+            <strong>V1ME</strong>
+            <span>COMMUNITY</span>
+        </div>
+
+        <div class="footer-links">
+
+            <a
+                href="https://discord.gg/7t8vAnn3n"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Discord
+            </a>
+
+            <a href="#" onclick="return false;">
+                YouTube
+            </a>
+
+            <a href="#" onclick="return false;">
+                Правила
+            </a>
+
+        </div>
+
+        <div class="copyright">
+            © 2026 V1ME Community
+        </div>
+
+    </div>
+
+</footer>
+
+
+<script>
+
+    // ==============================
+    // SUPABASE
+    // ==============================
+
+    const SUPABASE_URL =
+        "https://rfgsmiprdmlpximyeaoy.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_h9m8acjhlJEAETS7nJZU8g_8M29PNAS";
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+    // ==============================
+    // SECURITY
+    // ==============================
+
+    function escapeHTML(value) {
+
+        if (
+            value === null ||
+            value === undefined
+        ) {
+            return "";
+        }
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+
+    // ==============================
+    // DATE
+    // ==============================
+
+    function formatDate(date) {
+
+        if (!date) {
+            return "";
+        }
+
+        const d = new Date(date);
+
+        return d.toLocaleDateString(
+            "uk-UA",
+            {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            }
+        );
+
+    }
+
+
+    // ==============================
+    // LOAD NEWS
+    // ==============================
+
+    async function loadNews() {
+
+        const newsList =
+            document.getElementById(
+                "newsList"
+            );
+
+
+        try {
+
+            const { data, error } =
+                await supabaseClient
+                    .from("news")
+                    .select("*")
+                    .order(
+                        "created_at",
+                        {
+                            ascending: false
+                        }
+                    );
+
+
+            if (error) {
+
+                console.error(error);
+
+                newsList.innerHTML = `
+                    <div class="card">
+                        <h3>Помилка</h3>
+                        <p>
+                            Не вдалося завантажити новини.
+                        </p>
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            if (!data || data.length === 0) {
+
+                newsList.innerHTML = `
+                    <div class="card">
+                        <h3>Новин поки немає</h3>
+
+                        <p>
+                            Адміністратор ще не опублікував
+                            жодної новини.
+                        </p>
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            newsList.innerHTML = "";
+
+
+            data.forEach(news => {
+
+                const article =
+                    document.createElement("article");
+
+                article.className =
+                    "news-card";
+
+
+                let imageHTML = "";
+
+                if (news.image_url) {
+
+                    imageHTML = `
+                        <div class="news-image">
+                            <img
+                                src="${escapeHTML(
+                                    news.image_url
+                                )}"
+                                alt="${escapeHTML(
+                                    news.title
+                                )}"
+                                loading="lazy"
+                            >
+                        </div>
+                    `;
+
+                }
+
+
+                article.innerHTML = `
+
+                    ${imageHTML}
+
+                    <div class="news-content">
+
+                        <div class="news-date">
+                            ${formatDate(
+                                news.created_at
+                            )}
+                        </div>
+
+                        <h3>
+                            ${escapeHTML(
+                                news.title
+                            )}
+                        </h3>
+
+                        <p>
+                            ${escapeHTML(
+                                news.content
+                            ).replace(
+                                /\n/g,
+                                "<br>"
+                            )}
+                        </p>
+
+                    </div>
+
+                `;
+
+
+                newsList.appendChild(article);
+
+            });
+
+
+        } catch (error) {
+
+            console.error(
+                "Помилка:",
+                error
+            );
+
+            newsList.innerHTML = `
+                <div class="card">
+                    <h3>Щось пішло не так</h3>
+                    <p>
+                        Спробуй оновити сторінку.
+                    </p>
+                </div>
+            `;
+
+        }
+
+    }
+
+
+    // ==============================
+    // START
+    // ==============================
+
+    loadNews();
+
+</script>
+
+</body>
+</html>

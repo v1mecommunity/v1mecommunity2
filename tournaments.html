@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Турніри — V1ME Community</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* =========================
+           TOURNAMENTS PAGE
+        ========================= */
+
+        .tournaments-page {
+            padding: 80px 0 110px;
+            min-height: calc(100vh - 178px);
+        }
+
+        .page-heading {
+            margin-bottom: 45px;
+        }
+
+        .page-heading h1 {
+            font-size: clamp(42px, 6vw, 70px);
+            line-height: 0.95;
+            letter-spacing: -3px;
+            margin-bottom: 15px;
+        }
+
+        .page-heading h1 span {
+            color: var(--accent-light);
+        }
+
+        .page-heading p {
+            max-width: 650px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        /* FILTERS */
+
+        .filters {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .filter-button {
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.03);
+            color: var(--text-secondary);
+            padding: 10px 17px;
+            border-radius: 7px;
+            font-family: inherit;
+            font-size: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.25s ease;
+        }
+
+        .filter-button:hover {
+            color: white;
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .filter-button.active {
+            color: white;
+            background: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 5px 20px rgba(124,60,255,0.2);
+        }
+
+        /* TOURNAMENT LIST */
+
+        .all-tournaments {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .tournament-card {
+            overflow: hidden;
+        }
+
+        .tournament-card.hidden {
+            display: none;
+        }
+
+        /* EXTRA CARD INFORMATION */
+
+        .tournament-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            color: var(--text-secondary);
+            font-size: 9px;
+        }
+
+        .tournament-meta span:first-child {
+            color: var(--accent-light);
+            font-weight: 700;
+        }
+
+        .tournament-date {
+            color: var(--text-dark);
+        }
+
+        .tournament-info strong {
+            display: block;
+        }
+
+        /* LOADING */
+
+        .loading {
+            padding: 70px 20px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-align: center;
+            background: var(--card);
+            color: var(--text-secondary);
+            grid-column: 1 / -1;
+        }
+
+        /* EMPTY MESSAGE */
+
+        .no-results {
+            display: none;
+            padding: 70px 20px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-align: center;
+            background: var(--card);
+        }
+
+        .no-results.show {
+            display: block;
+        }
+
+        .no-results h3 {
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+
+        .no-results p {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        /* ERROR */
+
+        .error-message {
+            display: none;
+            padding: 25px;
+            border: 1px solid rgba(255, 80, 80, 0.25);
+            border-radius: 12px;
+            background: rgba(255, 80, 80, 0.05);
+            color: #ff7b7b;
+            grid-column: 1 / -1;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* PAGE RESPONSIVE */
+
+        @media (max-width: 1000px) {
+
+            .all-tournaments {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 650px) {
+
+            .tournaments-page {
+                padding: 60px 0 80px;
+            }
+
+            .all-tournaments {
+                grid-template-columns: 1fr;
+            }
+
+            .page-heading h1 {
+                letter-spacing: -2px;
+            }
+
+            .filters {
+                width: 100%;
+            }
+
+            .filter-button {
+                flex: 1;
+            }
+
+        }
+    </style>
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="header">
+
+    <div class="container header-content">
+
+        <a href="index.html" class="logo">
+            <span>V1ME</span>
+            <small>COMMUNITY</small>
+        </a>
+
+        <nav class="nav">
+
+            <a href="index.html">
+                ← Головна
+            </a>
+
+        </nav>
+
+        <a
+            href="https://discord.gg/7t8vAnn3n"
+            class="discord-button"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            Discord
+        </a>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main>
+
+    <section class="tournaments-page">
+
+        <div class="container">
+
+
+            <!-- PAGE HEADING -->
+
+            <div class="page-heading">
+
+                <span class="section-label">
+                    COMPETITIONS
+                </span>
+
+                <h1>
+                    Всі <span>турніри</span>
+                </h1>
+
+                <p>
+                    Переглядай поточні, майбутні та завершені
+                    турніри V1ME Community. Обирай турнір,
+                    переглядай його учасників та слідкуй за результатами.
+                </p>
+
+            </div>
+
+
+
+            <!-- FILTERS -->
+
+            <div class="filters">
+
+                <button
+                    class="filter-button active"
+                    data-filter="all">
+                    ALL
+                </button>
+
+                <button
+                    class="filter-button"
+                    data-filter="live">
+                    LIVE
+                </button>
+
+                <button
+                    class="filter-button"
+                    data-filter="upcoming">
+                    UPCOMING
+                </button>
+
+                <button
+                    class="filter-button"
+                    data-filter="finished">
+                    FINISHED
+                </button>
+
+            </div>
+
+
+
+            <!-- TOURNAMENTS -->
+
+            <div
+                class="all-tournaments"
+                id="tournamentList">
+
+                <div
+                    class="loading"
+                    id="loading">
+
+                    Завантаження турнірів...
+
+                </div>
+
+            </div>
+
+
+
+            <!-- NO RESULTS -->
+
+            <div
+                class="no-results"
+                id="noResults">
+
+                <h3>
+                    Турнірів не знайдено
+                </h3>
+
+                <p>
+                    У цій категорії поки немає турнірів.
+                </p>
+
+            </div>
+
+
+            <!-- ERROR -->
+
+            <div
+                class="error-message"
+                id="errorMessage">
+
+                Не вдалося завантажити турніри.
+                Перевір підключення до Supabase та RLS-політики.
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="footer">
+
+    <div class="container footer-content">
+
+        <div class="logo">
+
+            <span>
+                V1ME
+            </span>
+
+            <small>
+                COMMUNITY
+            </small>
+
+        </div>
+
+
+        <p>
+            © 2026 V1ME Community. All rights reserved.
+        </p>
+
+
+        <div class="footer-links">
+
+            <a
+                href="https://discord.gg/7t8vAnn3n"
+                target="_blank"
+                rel="noopener noreferrer">
+
+                Discord
+
+            </a>
+
+            <a href="#">
+                YouTube
+            </a>
+
+            <a href="#">
+                Rules
+            </a>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =========================
+     SUPABASE
+========================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+    /* =========================
+       SUPABASE CONFIG
+    ========================= */
+
+    const SUPABASE_URL =
+        "https://rfgsmiprdmlpximyeaoy.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_h9m8acjhlJEAETS7nJZU8g_8M29PNAS";
+
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+
+    /* =========================
+       ELEMENTS
+    ========================= */
+
+    const tournamentList =
+        document.getElementById("tournamentList");
+
+    const loading =
+        document.getElementById("loading");
+
+    const noResults =
+        document.getElementById("noResults");
+
+    const errorMessage =
+        document.getElementById("errorMessage");
+
+    const filterButtons =
+        document.querySelectorAll(".filter-button");
+
+
+
+    /* =========================
+       VARIABLES
+    ========================= */
+
+    let tournaments = [];
+
+
+
+    /* =========================
+       ESCAPE HTML
+    ========================= */
+
+    function escapeHtml(value) {
+
+        if (value === null || value === undefined) {
+            return "";
+        }
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+
+    /* =========================
+       FORMAT DATE
+    ========================= */
+
+    function formatDate(date) {
+
+        if (!date) {
+            return "Дата не вказана";
+        }
+
+        const d = new Date(date);
+
+        if (isNaN(d.getTime())) {
+            return date;
+        }
+
+        const months = [
+            "JAN",
+            "FEB",
+            "MAR",
+            "APR",
+            "MAY",
+            "JUN",
+            "JUL",
+            "AUG",
+            "SEP",
+            "OCT",
+            "NOV",
+            "DEC"
+        ];
+
+        return `
+            ${String(d.getDate()).padStart(2, "0")}
+            ${months[d.getMonth()]}
+            ${d.getFullYear()}
+        `;
+
+    }
+
+
+
+    /* =========================
+       STATUS
+    ========================= */
+
+    function getStatusText(status) {
+
+        if (status === "live") {
+            return "LIVE";
+        }
+
+        if (status === "finished") {
+            return "FINISHED";
+        }
+
+        return "UPCOMING";
+
+    }
+
+
+
+    /* =========================
+       STATUS CLASS
+    ========================= */
+
+    function getStatusClass(status) {
+
+        if (status === "live") {
+            return "live-tag";
+        }
+
+        if (status === "finished") {
+            return "";
+        }
+
+        return "upcoming-tag";
+
+    }
+
+
+
+    /* =========================
+       RENDER TOURNAMENTS
+    ========================= */
+
+    function renderTournaments(filter = "all") {
+
+        tournamentList.innerHTML = "";
+
+        noResults.classList.remove("show");
+
+        let filtered = tournaments;
+
+
+        if (filter !== "all") {
+
+            filtered =
+                tournaments.filter(
+                    tournament =>
+                        tournament.status === filter
+                );
+
+        }
+
+
+        if (filtered.length === 0) {
+
+            noResults.classList.add("show");
+
+            return;
+
+        }
+
+
+        filtered.forEach(tournament => {
+
+            const status =
+                tournament.status || "upcoming";
+
+            const statusText =
+                getStatusText(status);
+
+            const statusClass =
+                getStatusClass(status);
+
+
+            const teamsCount =
+                tournament.teams_count ?? 0;
+
+            const prize =
+                tournament.prize || "—";
+
+            const format =
+                tournament.format || "Single Elimination";
+
+            const date =
+                formatDate(tournament.tournament_date);
+
+            const time =
+                tournament.tournament_time
+                    ? tournament.tournament_time.substring(0, 5)
+                    : "";
+
+
+            const card =
+                document.createElement("article");
+
+            card.className =
+                "tournament-card";
+
+
+            card.dataset.status =
+                status;
+
+
+            card.innerHTML = `
+
+                <div class="tournament-image">
+
+                    <span class="game-tag">
+                        CS2
+                    </span>
+
+                    <span class="status-tag ${statusClass}">
+                        ${escapeHtml(statusText)}
+                    </span>
+
+                </div>
+
+
+                <div class="tournament-content">
+
+                    <div class="tournament-meta">
+
+                        <span>
+                            ${status === "live"
+                                ? "● LIVE NOW"
+                                : escapeHtml(statusText)}
+                        </span>
+
+                        <span class="tournament-date">
+                            ${escapeHtml(date)}
+                        </span>
+
+                    </div>
+
+
+                    <h3>
+                        ${escapeHtml(tournament.name)}
+                    </h3>
+
+
+                    <p>
+                        Турнір V1ME Community
+                    </p>
+
+
+                    <div class="tournament-info">
+
+                        <div>
+
+                            <small>
+                                Команди
+                            </small>
+
+                            <strong>
+                                ${escapeHtml(teamsCount)}
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <small>
+                                Приз
+                            </small>
+
+                            <strong>
+                                ${escapeHtml(prize)}
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <small>
+                                Формат
+                            </small>
+
+                            <strong>
+                                ${escapeHtml(format)}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    ${
+                        time
+                        ? `
+                            <div style="
+                                margin-top: 12px;
+                                color: var(--text-secondary);
+                                font-size: 10px;
+                            ">
+                                Час початку:
+                                <strong style="color:white;">
+                                    ${escapeHtml(time)}
+                                </strong>
+                            </div>
+                        `
+                        : ""
+                    }
+
+
+                    <a
+                        href="tournament.html?id=${encodeURIComponent(tournament.id)}"
+                        class="small-button">
+
+                        Відкрити турнір →
+
+                    </a>
+
+                </div>
+
+            `;
+
+
+            tournamentList.appendChild(card);
+
+        });
+
+    }
+
+
+
+    /* =========================
+       LOAD TOURNAMENTS
+    ========================= */
+
+    async function loadTournaments() {
+
+        try {
+
+            loading.style.display = "block";
+
+            errorMessage.classList.remove("show");
+
+            noResults.classList.remove("show");
+
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+
+                .from("tournaments")
+
+                .select("*")
+
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "Supabase error:",
+                    error
+                );
+
+                throw error;
+
+            }
+
+
+            tournaments =
+                data || [];
+
+
+            loading.style.display = "none";
+
+
+            renderTournaments("all");
+
+
+        } catch (error) {
+
+            console.error(
+                "Loading tournaments failed:",
+                error
+            );
+
+
+            loading.style.display = "none";
+
+            errorMessage.classList.add("show");
+
+        }
+
+    }
+
+
+
+    /* =========================
+       FILTERS
+    ========================= */
+
+    filterButtons.forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                filterButtons.forEach(btn => {
+
+                    btn.classList.remove("active");
+
+                });
+
+
+                button.classList.add("active");
+
+
+                const filter =
+                    button.dataset.filter;
+
+
+                renderTournaments(filter);
+
+            }
+        );
+
+    });
+
+
+
+    /* =========================
+       START
+    ========================= */
+
+    loadTournaments();
+
+</script>
+
+
+</body>
+</html>

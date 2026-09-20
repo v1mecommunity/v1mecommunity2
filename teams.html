@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Команди — V1ME Community</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #08080d;
+            color: white;
+            min-height: 100vh;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        header {
+            width: 100%;
+            border-bottom: 1px solid #22222d;
+            background: rgba(8, 8, 13, 0.95);
+        }
+
+        .nav {
+            max-width: 1250px;
+            margin: auto;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 25px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            white-space: nowrap;
+        }
+
+        .logo span {
+            color: #8b5cf6;
+        }
+
+        .menu {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .menu a {
+            color: #a6a6b3;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            color: white;
+        }
+
+        .discord {
+            background: #5865f2;
+            color: white !important;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+
+        main {
+            max-width: 1250px;
+            margin: auto;
+            padding: 60px 20px 100px;
+        }
+
+        .page-title {
+            margin-bottom: 40px;
+        }
+
+        .page-title .small {
+            color: #8b5cf6;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .page-title h1 {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 12px;
+        }
+
+        .page-title p {
+            color: #888894;
+            font-size: 16px;
+        }
+
+        .status {
+            margin-bottom: 25px;
+            color: #777783;
+            font-size: 14px;
+        }
+
+        .status span {
+            color: #8b5cf6;
+        }
+
+        #teamsContainer {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .team-card {
+            background: #101017;
+            border: 1px solid #242431;
+            border-radius: 14px;
+            padding: 24px;
+            transition: 0.25s;
+        }
+
+        .team-card:hover {
+            border-color: #6d43d8;
+            transform: translateY(-3px);
+        }
+
+        .team-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .team-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: #181522;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            border: 1px solid #30294a;
+        }
+
+        .team-name {
+            flex: 1;
+        }
+
+        .team-name h2 {
+            font-size: 21px;
+            margin-bottom: 5px;
+        }
+
+        .team-tournament {
+            color: #8b5cf6;
+            font-size: 12px;
+        }
+
+        .players-title {
+            color: #777783;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .players {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .player {
+            background: #0b0b11;
+            border: 1px solid #1e1e28;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #d7d7df;
+        }
+
+        .player::before {
+            content: "👤";
+            margin-right: 8px;
+        }
+
+        .substitutes {
+            margin-top: 18px;
+        }
+
+        .substitute {
+            background: #0b0b11;
+            border: 1px solid #1e1e28;
+            padding: 9px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #9999a5;
+            margin-bottom: 7px;
+        }
+
+        .substitute::before {
+            content: "🔄";
+            margin-right: 8px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 70px 20px;
+            border: 1px dashed #292934;
+            border-radius: 14px;
+            color: #777783;
+            grid-column: 1 / -1;
+        }
+
+        .empty .icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .loading {
+            text-align: center;
+            color: #777783;
+            padding: 50px;
+            grid-column: 1 / -1;
+        }
+
+        footer {
+            border-top: 1px solid #20202a;
+            padding: 35px 20px;
+            color: #666672;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        @media (max-width: 900px) {
+            #teamsContainer {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .menu {
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .menu {
+                width: 100%;
+            }
+
+            #teamsContainer {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title h1 {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="nav">
+
+        <a href="index.html" class="logo">
+            V1ME <span>COMMUNITY</span>
+        </a>
+
+        <nav class="menu">
+            <a href="index.html">Головна</a>
+            <a href="tournaments.html">Турніри</a>
+            <a href="bracket.html">Сітка</a>
+            <a href="matches.html">Матчі</a>
+            <a href="teams.html" class="active">Команди</a>
+            <a href="news.html">Новини</a>
+            <a href="register.html">Реєстрація</a>
+
+            <a
+                href="https://discord.gg/7t8vAnn3n"
+                target="_blank"
+                class="discord"
+            >
+                Discord
+            </a>
+        </nav>
+
+    </div>
+</header>
+
+
+<main>
+
+    <section class="page-title">
+
+        <div class="small">
+            V1ME COMMUNITY
+        </div>
+
+        <h1>Команди</h1>
+
+        <p>
+            Команди, які беруть участь у турнірах V1ME Community.
+        </p>
+
+    </section>
+
+
+    <div class="status" id="status">
+        <span>●</span> Завантаження команд...
+    </div>
+
+
+    <section id="teamsContainer">
+
+        <div class="loading">
+            Завантаження...
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+    V1ME COMMUNITY · © 2026
+</footer>
+
+
+<script>
+
+const SUPABASE_URL = "https://rfgsmiprdmlpximyeaoy.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_h9m8acjhlJEAETS7nJZU8g_8M29PNAS";
+
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+const teamsContainer =
+    document.getElementById("teamsContainer");
+
+const statusElement =
+    document.getElementById("status");
+
+
+function escapeHtml(text) {
+
+    if (!text) return "";
+
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+function splitPlayers(text) {
+
+    if (!text) return [];
+
+    return String(text)
+        .split(/\r?\n/)
+        .map(player => player.trim())
+        .filter(player => player.length > 0);
+}
+
+
+async function loadTeams() {
+
+    statusElement.innerHTML =
+        '<span>●</span> Завантаження команд...';
+
+    teamsContainer.innerHTML = `
+        <div class="loading">
+            Завантаження команд...
+        </div>
+    `;
+
+
+    try {
+
+        /*
+         * Завантажуємо команди.
+         * Тут беремо ВСІ поля з таблиці teams.
+         */
+
+        const { data: teams, error: teamsError } =
+            await supabaseClient
+                .from("teams")
+                .select("*")
+                .order("id", { ascending: true });
+
+
+        if (teamsError) {
+
+            console.error(
+                "Помилка завантаження команд:",
+                teamsError
+            );
+
+            statusElement.innerHTML =
+                '<span>●</span> Помилка завантаження';
+
+            teamsContainer.innerHTML = `
+                <div class="empty">
+
+                    <div class="icon">⚠️</div>
+
+                    <h2>Не вдалося завантажити команди</h2>
+
+                    <p style="margin-top:10px;">
+                        Перевір підключення до Supabase.
+                    </p>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        console.log("Команди з Supabase:", teams);
+
+
+        if (!teams || teams.length === 0) {
+
+            statusElement.innerHTML =
+                '<span>●</span> Команд поки немає';
+
+            teamsContainer.innerHTML = `
+                <div class="empty">
+
+                    <div class="icon">👥</div>
+
+                    <h2>Команд поки немає</h2>
+
+                    <p style="margin-top:10px;">
+                        
+                    </p>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        /*
+         * Отримуємо ID турнірів,
+         * щоб показувати назву турніру.
+         */
+
+        const tournamentIds = [
+            ...new Set(
+                teams
+                    .map(team => team.tournament_id)
+                    .filter(id => id !== null && id !== undefined)
+            )
+        ];
+
+
+        let tournaments = [];
+
+
+        if (tournamentIds.length > 0) {
+
+            const { data, error } =
+                await supabaseClient
+                    .from("tournaments")
+                    .select("id, name")
+                    .in("id", tournamentIds);
+
+
+            if (error) {
+
+                console.warn(
+                    "Не вдалося завантажити турніри:",
+                    error
+                );
+
+            } else {
+
+                tournaments = data || [];
+
+            }
+        }
+
+
+        const tournamentMap = {};
+
+        tournaments.forEach(tournament => {
+
+            tournamentMap[tournament.id] =
+                tournament.name;
+
+        });
+
+
+        /*
+         * Створюємо картки команд.
+         */
+
+        teamsContainer.innerHTML = teams.map(team => {
+
+            const players =
+                splitPlayers(team.players);
+
+            const substitutes =
+                splitPlayers(team.substitutes);
+
+
+            const tournamentName =
+                team.tournament_id &&
+                tournamentMap[team.tournament_id]
+                    ? tournamentMap[team.tournament_id]
+                    : "Турнір не вказано";
+
+
+            const playersHtml =
+                players.length > 0
+
+                    ? players.map(player => `
+                        <div class="player">
+                            ${escapeHtml(player)}
+                        </div>
+                    `).join("")
+
+                    : `
+                        <div class="player">
+                            Гравців не вказано
+                        </div>
+                    `;
+
+
+            const substitutesHtml =
+                substitutes.length > 0
+
+                    ? `
+                        <div class="substitutes">
+
+                            <div class="players-title">
+                                Запасні
+                            </div>
+
+                            ${substitutes.map(player => `
+                                <div class="substitute">
+                                    ${escapeHtml(player)}
+                                </div>
+                            `).join("")}
+
+                        </div>
+                    `
+
+                    : "";
+
+
+            return `
+                <article class="team-card">
+
+                    <div class="team-top">
+
+                        <div class="team-icon">
+                            👥
+                        </div>
+
+                        <div class="team-name">
+
+                            <h2>
+                                ${escapeHtml(team.name)}
+                            </h2>
+
+                            <div class="team-tournament">
+                                ${escapeHtml(tournamentName)}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="players-title">
+                        Основний склад
+                    </div>
+
+
+                    <div class="players">
+                        ${playersHtml}
+                    </div>
+
+
+                    ${substitutesHtml}
+
+                </article>
+            `;
+
+        }).join("");
+
+
+        statusElement.innerHTML =
+            `<span>●</span> ${teams.length} команд`;
+
+
+    } catch (error) {
+
+        console.error(
+            "Невідома помилка:",
+            error
+        );
+
+        statusElement.innerHTML =
+            '<span>●</span> Помилка';
+
+        teamsContainer.innerHTML = `
+            <div class="empty">
+
+                <div class="icon">⚠️</div>
+
+                <h2>Помилка</h2>
+
+                <p style="margin-top:10px;">
+                    Не вдалося отримати дані.
+                </p>
+
+            </div>
+        `;
+    }
+}
+
+
+/*
+ * Запускаємо завантаження.
+ */
+
+loadTeams();
+
+</script>
+
+</body>
+</html>

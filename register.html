@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Реєстрація — V1ME Community</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            background: #0b0b10;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        .register-page {
+            max-width: 800px;
+            margin: auto;
+            padding: 60px 20px;
+        }
+
+        .title {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #888;
+            margin-bottom: 35px;
+        }
+
+        .form-box {
+            background: #15151d;
+            border: 1px solid #292936;
+            border-radius: 16px;
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 14px;
+            background: #0e0e14;
+            border: 1px solid #30303d;
+            border-radius: 9px;
+            color: white;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #8b5cf6;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #8b5cf6;
+            color: white;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .submit-button:hover {
+            background: #7c3aed;
+            transform: translateY(-2px);
+        }
+
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #12351f;
+            border: 1px solid #22c55e;
+            color: #4ade80;
+        }
+
+        .error {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #351212;
+            border: 1px solid #ef4444;
+            color: #f87171;
+        }
+
+        .loading {
+            color: #888;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 25px;
+            color: #aaa;
+            text-decoration: none;
+        }
+
+        .back:hover {
+            color: white;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="register-page">
+
+    <h1 class="title">
+        Реєстрація на турнір
+    </h1>
+
+    <p class="subtitle">
+        Зареєструй свою команду для участі у V1ME Community
+    </p>
+
+    <div class="form-box">
+
+        <form id="registerForm">
+
+            <!-- ТУРНІР -->
+
+            <div class="form-group">
+
+                <label for="tournament">
+                    Турнір
+                </label>
+
+                <select id="tournament" required>
+
+                    <option value="">
+                        Завантаження турнірів...
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- НАЗВА КОМАНДИ -->
+
+            <div class="form-group">
+
+                <label for="team">
+                    Назва команди
+                </label>
+
+                <input
+                    type="text"
+                    id="team"
+                    placeholder="Наприклад: SavageHawks"
+                    required
+                >
+
+            </div>
+
+
+            <!-- DISCORD -->
+
+            <div class="form-group">
+
+                <label for="discord">
+                    Discord капітана
+                </label>
+
+                <input
+                    type="text"
+                    id="discord"
+                    placeholder="Наприклад: v1me"
+                    required
+                >
+
+            </div>
+
+
+            <!-- КАПІТАН -->
+
+            <div class="form-group">
+
+                <label for="captain">
+                    Нікнейм капітана
+                </label>
+
+                <input
+                    type="text"
+                    id="captain"
+                    placeholder="Нікнейм у CS2"
+                    required
+                >
+
+            </div>
+
+
+            <!-- ГРАВЦІ -->
+
+            <div class="form-group">
+
+                <label for="players">
+                    Гравці команди
+                </label>
+
+                <textarea
+                    id="players"
+                    placeholder="Введи 5 гравців або посилання на їхні FACEIT-профілі"
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <!-- STEAM -->
+
+            <div class="form-group">
+
+                <label for="steam">
+                    Steam профіль капітана
+                </label>
+
+                <input
+                    type="url"
+                    id="steam"
+                    placeholder="https://steamcommunity.com/..."
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="submit-button"
+                id="submitButton"
+            >
+                Подати заявку
+            </button>
+
+
+            <div id="success" class="success">
+                ✅ Заявку успішно створено! Очікуй підтвердження від адміністрації V1ME Community.
+            </div>
+
+
+            <div id="error" class="error"></div>
+
+        </form>
+
+    </div>
+
+
+    <a
+        href="index.html"
+        class="back"
+    >
+        ← Повернутися на головну
+    </a>
+
+</div>
+
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL = "https://rfgsmiprdmlpximyeaoy.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_h9m8acjhlJEAETS7nJZU8g_8M29PNAS";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+// ==========================================
+// ЕЛЕМЕНТИ
+// ==========================================
+
+const tournamentSelect =
+    document.getElementById("tournament");
+
+const registrationForm =
+    document.getElementById("registerForm");
+
+const submitButton =
+    document.getElementById("submitButton");
+
+const successMessage =
+    document.getElementById("success");
+
+const errorMessage =
+    document.getElementById("error");
+
+
+// ==========================================
+// ЗАВАНТАЖЕННЯ ТУРНІРІВ
+// ==========================================
+
+async function loadTournamentsForRegistration() {
+
+    tournamentSelect.innerHTML = `
+        <option value="">
+            Завантаження турнірів...
+        </option>
+    `;
+
+
+    const { data, error } = await supabaseClient
+
+        .from("tournaments")
+
+        .select(`
+            id,
+            name,
+            prize,
+            status,
+            teams_count,
+            tournament_date,
+            tournament_time,
+            format
+        `)
+
+        .order("created_at", {
+            ascending: false
+        });
+
+
+    if (error) {
+
+        console.error(
+            "Помилка завантаження турнірів:",
+            error
+        );
+
+        tournamentSelect.innerHTML = `
+            <option value="">
+                Не вдалося завантажити турніри
+            </option>
+        `;
+
+        return;
+    }
+
+
+    tournamentSelect.innerHTML = "";
+
+
+    if (!data || data.length === 0) {
+
+        tournamentSelect.innerHTML = `
+            <option value="">
+                Турнірів поки немає
+            </option>
+        `;
+
+        return;
+    }
+
+
+    const firstOption =
+        document.createElement("option");
+
+    firstOption.value = "";
+
+    firstOption.textContent =
+        "Оберіть турнір";
+
+    tournamentSelect.appendChild(
+        firstOption
+    );
+
+
+    data.forEach(tournament => {
+
+        const option =
+            document.createElement("option");
+
+
+        // ВАЖЛИВО:
+        // передаємо ID турніру
+
+        option.value =
+            String(tournament.id);
+
+
+        let text =
+            tournament.name;
+
+
+        if (tournament.prize) {
+
+            text +=
+                ` — ${tournament.prize}`;
+
+        }
+
+
+        if (tournament.teams_count) {
+
+            text +=
+                ` (${tournament.teams_count} команд)`;
+
+        }
+
+
+        option.textContent =
+            text;
+
+
+        // Зберігаємо назву
+
+        option.dataset.name =
+            tournament.name;
+
+
+        tournamentSelect.appendChild(
+            option
+        );
+
+    });
+
+}
+
+
+// ==========================================
+// ВІДПРАВКА ЗАЯВКИ
+// ==========================================
+
+async function submitRegistration(event) {
+
+    event.preventDefault();
+
+
+    successMessage.style.display =
+        "none";
+
+    errorMessage.style.display =
+        "none";
+
+
+    // ======================================
+    // ТУРНІР
+    // ======================================
+
+    const tournamentId =
+        tournamentSelect.value.trim();
+
+
+    if (!tournamentId) {
+
+        errorMessage.textContent =
+            "Оберіть турнір.";
+
+        errorMessage.style.display =
+            "block";
+
+        return;
+    }
+
+
+    // ======================================
+    // НАЗВА КОМАНДИ
+    // ======================================
+
+    const teamName =
+        document
+            .getElementById("team")
+            .value
+            .trim();
+
+
+    if (!teamName) {
+
+        errorMessage.textContent =
+            "Введіть назву команди.";
+
+        errorMessage.style.display =
+            "block";
+
+        return;
+    }
+
+
+    // ======================================
+    // КАПІТАН
+    // ======================================
+
+    const captainName =
+        document
+            .getElementById("captain")
+            .value
+            .trim();
+
+
+    if (!captainName) {
+
+        errorMessage.textContent =
+            "Введіть ім'я капітана.";
+
+        errorMessage.style.display =
+            "block";
+
+        return;
+    }
+
+
+    // ======================================
+    // DISCORD
+    // ======================================
+
+    const captainContact =
+        document
+            .getElementById("discord")
+            .value
+            .trim();
+
+
+    // ======================================
+    // ГРАВЦІ
+    // ======================================
+
+    const players =
+        document
+            .getElementById("players")
+            .value
+            .trim();
+
+
+    // ======================================
+    // STEAM
+    // ======================================
+
+    const steam =
+        document
+            .getElementById("steam")
+            .value
+            .trim();
+
+
+    // ======================================
+    // ПЕРЕВІРЯЄМО ТУРНІР
+    // ======================================
+
+    const {
+        data: tournament,
+        error: tournamentError
+    } = await supabaseClient
+
+        .from("tournaments")
+
+        .select(`
+            id,
+            name,
+            prize,
+            status,
+            teams_count
+        `)
+
+        .eq(
+            "id",
+            tournamentId
+        )
+
+        .maybeSingle();
+
+
+    if (tournamentError) {
+
+        console.error(
+            "Помилка перевірки турніру:",
+            tournamentError
+        );
+
+        errorMessage.textContent =
+            "Помилка перевірки турніру.";
+
+        errorMessage.style.display =
+            "block";
+
+        return;
+    }
+
+
+    if (!tournament) {
+
+        errorMessage.textContent =
+            "Цей турнір більше не існує.";
+
+        errorMessage.style.display =
+            "block";
+
+        await loadTournamentsForRegistration();
+
+        return;
+    }
+
+
+    // ======================================
+    // ПЕРЕВІРКА ЛІМІТУ КОМАНД
+    // ======================================
+
+    const {
+        count: teamsCount,
+        error: teamsCountError
+    } = await supabaseClient
+
+        .from("teams")
+
+        .select(
+            "id",
+            {
+                count: "exact",
+                head: true
+            }
+        )
+
+        .eq(
+            "tournament_id",
+            tournament.id
+        );
+
+
+    if (teamsCountError) {
+
+        console.error(
+            "Помилка перевірки кількості команд:",
+            teamsCountError
+        );
+
+        errorMessage.textContent =
+            "Не вдалося перевірити кількість команд.";
+
+        errorMessage.style.display =
+            "block";
+
+        return;
+    }
+
+
+    if (
+        tournament.teams_count &&
+        teamsCount >= tournament.teams_count
+    ) {
+
+        errorMessage.textContent =
+            "❌ Реєстрацію на цей турнір вже закрито — всі місця зайняті.";
+
+        errorMessage.style.display =
+            "block";
+
+        return;
+    }
+
+
+    // ======================================
+    // СТВОРЮЄМО ЗАЯВКУ
+    // ======================================
+
+    submitButton.disabled = true;
+
+    submitButton.textContent =
+        "Відправлення...";
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+
+        .from("tournament_applications")
+
+        .insert({
+
+            team_name:
+                teamName,
+
+            captain_name:
+                captainName,
+
+            captain_contact:
+                captainContact || null,
+
+            players:
+                players || null,
+
+            steam:
+                steam || null,
+
+            tournament:
+                tournament.name,
+
+            tournament_id:
+                tournament.id,
+
+            status:
+                "pending"
+
+        })
+
+        .select()
+
+        .single();
+
+
+    submitButton.disabled = false;
+
+    submitButton.textContent =
+        "Подати заявку";
+
+
+    // ======================================
+    // ПОМИЛКА
+    // ======================================
+
+    if (error) {
+
+        console.error(
+            "Помилка створення заявки:",
+            error
+        );
+
+        errorMessage.textContent =
+            "❌ Не вдалося відправити заявку. Спробуй ще раз.";
+
+        errorMessage.style.display =
+            "block";
+
+        return;
+    }
+
+
+    // ======================================
+    // УСПІХ
+    // ======================================
+
+    successMessage.innerHTML = `
+        ✅ Заявку успішно створено!<br><br>
+
+        <strong>Турнір:</strong>
+        ${tournament.name}<br>
+
+        <strong>Команда:</strong>
+        ${teamName}<br>
+
+        <strong>Номер заявки:</strong>
+        #${data.id}<br><br>
+
+        Очікуй підтвердження від адміністрації V1ME Community.
+    `;
+
+    successMessage.style.display =
+        "block";
+
+
+    // Очищення форми
+
+    registrationForm.reset();
+
+    tournamentSelect.value = "";
+
+}
+
+
+// ==========================================
+// ЗАПУСК
+// ==========================================
+
+loadTournamentsForRegistration();
+
+
+registrationForm.addEventListener(
+    "submit",
+    submitRegistration
+);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>V1ME Community — CS2 Tournaments</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="container header-content">
+
+        <a href="index.html" class="logo">
+            <strong>V1ME</strong>
+            <span>COMMUNITY</span>
+        </a>
+
+        <nav class="nav">
+            <a href="index.html" class="active">Головна</a>
+            <a href="tournaments.html">Турніри</a>
+            <a href="bracket.html">Сітка</a>
+            <a href="matches.html">Матчі</a>
+            <a href="teams.html">Команди</a>
+            <a href="news.html">Новини</a>
+            <a href="register.html">Реєстрація</a>
+        </nav>
+
+        <a
+            href="https://discord.gg/7t8vAnn3n"
+            class="discord-button"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            Discord
+        </a>
+
+    </div>
+</header>
+
+
+<main>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container hero-content">
+
+            <div class="hero-text">
+
+                <div class="status">
+                    <span>●</span> ONLINE COMMUNITY
+                </div>
+
+                <h1>
+                    V1ME
+                    <span>COMMUNITY</span>
+                </h1>
+
+                <p>
+                    Турніри. Команди. Суперництво.
+                    Грай, перемагай та доводь свій рівень.
+                </p>
+
+                <div class="hero-buttons">
+
+                    <a
+                        href="tournaments.html"
+                        class="button primary"
+                    >
+                        Переглянути турніри
+                    </a>
+
+                    <a
+                        href="https://discord.gg/7t8vAnn3n"
+                        class="button secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Приєднатися до Discord
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- HERO TOURNAMENT CARD -->
+            <div
+                class="hero-card"
+                id="heroTournamentCard"
+                style="display:none;"
+            >
+
+                <div class="card-top">
+
+                    <span>
+                        LIVE TOURNAMENT
+                    </span>
+
+                    <span id="heroTournamentStatus">
+                        ● LIVE
+                    </span>
+
+                </div>
+
+
+                <h2 id="heroTournamentName">
+                    —
+                </h2>
+
+
+                <div class="game">
+                    Counter-Strike 2
+                </div>
+
+
+                <div class="prize">
+
+                    <span>
+                        Prize Pool
+                    </span>
+
+                    <strong id="heroPrize">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-info">
+
+                    <span>
+                        Teams
+                    </span>
+
+                    <strong id="heroTeams">
+                        0 / 0
+                    </strong>
+
+                </div>
+
+
+                <div class="progress">
+
+                    <div
+                        class="progress-bar"
+                        id="heroProgress"
+                        style="width:0%;"
+                    ></div>
+
+                </div>
+
+
+                <a
+                    href="tournaments.html"
+                    id="heroTournamentLink"
+                    class="card-button"
+                >
+                    Переглянути турнір →
+                </a>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- STATS -->
+    <section class="stats">
+
+        <div class="container stats-grid">
+
+            <div class="stat">
+
+                <strong>
+                    40+
+                </strong>
+
+                <span>
+                    Учасників Discord
+                </span>
+
+            </div>
+
+
+            <div class="stat">
+
+                <strong id="matchesCount">
+                    0
+                </strong>
+
+                <span>
+                    Проведених матчів
+                </span>
+
+            </div>
+
+
+            <div class="stat">
+
+                <strong id="teamsCount">
+                    0
+                </strong>
+
+                <span>
+                    Команд
+                </span>
+
+            </div>
+
+
+            <div class="stat">
+
+                <strong id="prizeStat">
+                    —
+                </strong>
+
+                <span>
+                    Призовий фонд
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- TOURNAMENTS -->
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-header">
+
+                <div>
+
+                    <div class="section-label">
+                        COMPETITIONS
+                    </div>
+
+                    <h2>
+                        Турніри
+                    </h2>
+
+                </div>
+
+
+                <a
+                    href="tournaments.html"
+                    class="view-all"
+                >
+                    Всі турніри →
+                </a>
+
+            </div>
+
+
+            <div
+                class="tournament-grid"
+                id="tournamentGrid"
+            >
+                <!-- Турніри завантажуються з Supabase -->
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CTA -->
+    <section class="cta">
+
+        <div class="container">
+
+            <div class="cta-box">
+
+                <div>
+
+                    <div class="section-label">
+                        JOIN THE COMMUNITY
+                    </div>
+
+                    <h2>
+                        Готовий до наступного матчу?
+                    </h2>
+
+                    <p>
+                        Приєднуйся до V1ME Community,
+                        знаходь команду та грай у наших турнірах.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="https://discord.gg/7t8vAnn3n"
+                    class="button primary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Приєднатися до Discord
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- FOOTER -->
+<footer class="footer">
+
+    <div class="container footer-content">
+
+        <div class="logo">
+
+            <strong>
+                V1ME
+            </strong>
+
+            <span>
+                COMMUNITY
+            </span>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <a
+                href="https://discord.gg/7t8vAnn3n"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Discord
+            </a>
+
+
+            <a
+    href="https://www.youtube.com/@v1mecommunity"
+    target="_blank"
+    rel="noopener noreferrer"
+>
+    YouTube
+</a>
+
+
+           <a
+    href="https://docs.google.com/document/d/1j5wHh7HvxE0_VqEyBr5jsrJ1iyiQg_0FrqklVMZjIBg/edit?usp=sharing"
+    target="_blank"
+    rel="noopener noreferrer"
+>
+    Правила
+</a>
+
+        </div>
+
+
+        <div class="copyright">
+            © 2026 V1ME Community
+        </div>
+
+    </div>
+
+</footer>
+
+
+<script>
+
+    // ==============================
+    // SUPABASE
+    // ==============================
+
+    const SUPABASE_URL =
+        "https://rfgsmiprdmlpximyeaoy.supabase.co";
+
+
+    const SUPABASE_KEY =
+        "sb_publishable_h9m8acjhlJEAETS7nJZU8g_8M29PNAS";
+
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+    // ==============================
+    // SECURITY
+    // ==============================
+
+    function escapeHTML(value) {
+
+        if (
+            value === null ||
+            value === undefined
+        ) {
+            return "";
+        }
+
+
+        return String(value)
+
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+
+            .replace(
+                /</g,
+                "&lt;"
+            )
+
+            .replace(
+                />/g,
+                "&gt;"
+            )
+
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+
+    // ==============================
+    // STATUS
+    // ==============================
+
+    function getStatus(status) {
+
+        const value =
+            String(
+                status || ""
+            )
+            .toLowerCase()
+            .trim();
+
+
+        if (
+            value === "live"
+        ) {
+
+            return {
+                text: "LIVE",
+                className: "live-tag"
+            };
+
+        }
+
+
+        if (
+            value === "finished"
+        ) {
+
+            return {
+                text: "FINISHED",
+                className: "upcoming-tag"
+            };
+
+        }
+
+
+        return {
+            text: "SOON",
+            className: "upcoming-tag"
+        };
+
+    }
+
+
+    // ==============================
+    // STATS
+    // ==============================
+
+    async function loadStats() {
+
+        try {
+
+            const matchesResult =
+                await supabaseClient
+                    .from("matches")
+                    .select("id", {
+                        count: "exact",
+                        head: true
+                    });
+
+
+            const teamsResult =
+                await supabaseClient
+                    .from("teams")
+                    .select("id", {
+                        count: "exact",
+                        head: true
+                    });
+
+
+            if (
+                !matchesResult.error &&
+                matchesResult.count !== null
+            ) {
+
+                document.getElementById(
+                    "matchesCount"
+                ).textContent =
+                    matchesResult.count;
+
+            }
+
+
+            if (
+                !teamsResult.error &&
+                teamsResult.count !== null
+            ) {
+
+                document.getElementById(
+                    "teamsCount"
+                ).textContent =
+                    teamsResult.count;
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Помилка завантаження статистики:",
+                error
+            );
+
+        }
+
+    }
+
+
+    // ==============================
+    // TOURNAMENTS
+    // ==============================
+
+    async function loadTournaments() {
+
+        const grid =
+            document.getElementById(
+                "tournamentGrid"
+            );
+
+
+        if (!grid) {
+            return;
+        }
+
+
+        try {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+
+                    .from("tournaments")
+
+                    .select("*")
+
+                    .order(
+                        "created_at",
+                        {
+                            ascending: false
+                        }
+                    )
+
+                    .limit(3);
+
+
+            if (error) {
+
+                console.error(
+                    "Помилка завантаження турнірів:",
+                    error
+                );
+
+
+                grid.innerHTML = `
+
+                    <div style="
+                        grid-column:1/-1;
+                        text-align:center;
+                        padding:40px 20px;
+                        color:#8d93a5;
+                    ">
+
+                        Не вдалося завантажити турніри.
+
+                    </div>
+
+                `;
+
+                return;
+            }
+
+
+            /*
+               ВАЖЛИВО:
+               завжди очищаємо HTML-блок.
+
+               Саме це прибирає старі
+               тестові картки.
+            */
+
+            grid.innerHTML = "";
+
+
+            /*
+               Якщо турнірів немає
+            */
+
+            if (
+                !data ||
+                data.length === 0
+            ) {
+
+                grid.innerHTML = `
+
+                    <div style="
+                        grid-column:1/-1;
+                        text-align:center;
+                        padding:50px 20px;
+                        border:1px dashed #292e3a;
+                        border-radius:14px;
+                        color:#8d93a5;
+                    ">
+
+                        <div style="
+                            font-size:40px;
+                            margin-bottom:12px;
+                        ">
+                            🏆
+                        </div>
+
+
+                        <h3 style="
+                            color:#fff;
+                            margin-bottom:8px;
+                        ">
+                            Турнірів поки немає
+                        </h3>
+
+
+                        <p style="
+                            color:#8d93a5;
+                            margin:0;
+                        ">
+                            Незабаром тут з'являться нові турніри V1ME Community.
+                        </p>
+
+                    </div>
+
+                `;
+
+                return;
+            }
+
+
+            /*
+               Виводимо тільки реальні
+               турніри з бази
+            */
+
+            data.forEach(
+                (tournament, index) => {
+
+                    const status =
+                        getStatus(
+                            tournament.status
+                        );
+
+
+                    const teamsCount =
+                        Number(
+                            tournament.teams_count || 8
+                        );
+
+
+                    const card =
+                        document.createElement(
+                            "article"
+                        );
+
+
+                    card.className =
+                        "tournament-card " +
+                        (
+                            index === 1
+                                ? "second"
+                                : index === 2
+                                ? "third"
+                                : ""
+                        );
+
+
+                    card.innerHTML = `
+
+                        <div class="tournament-image">
+
+                            <span class="game-tag">
+                                CS2
+                            </span>
+
+
+                            <span
+                                class="status-tag ${status.className}"
+                            >
+                                ${escapeHTML(
+                                    status.text
+                                )}
+                            </span>
+
+                        </div>
+
+
+                        <div class="tournament-content">
+
+                            <h3>
+                                ${escapeHTML(
+                                    tournament.name
+                                )}
+                            </h3>
+
+
+                            <div class="tournament-info">
+
+                                <span>
+                                    ${escapeHTML(
+                                        teamsCount
+                                    )} команд
+                                </span>
+
+
+                                <strong>
+                                    ${escapeHTML(
+                                        tournament.prize || "—"
+                                    )}
+                                </strong>
+
+                            </div>
+
+
+                            <a
+                                href="tournament.html?id=${encodeURIComponent(
+                                    tournament.id
+                                )}"
+                                class="small-button"
+                            >
+                                Детальніше →
+                            </a>
+
+                        </div>
+
+                    `;
+
+
+                    grid.appendChild(
+                        card
+                    );
+
+                }
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Помилка завантаження турнірів:",
+                error
+            );
+
+
+            grid.innerHTML = `
+
+                <div style="
+                    grid-column:1/-1;
+                    text-align:center;
+                    padding:40px 20px;
+                    color:#8d93a5;
+                ">
+
+                    Помилка завантаження турнірів.
+
+                </div>
+
+            `;
+
+        }
+
+    }
+
+
+    // ==============================
+    // MATCHES
+    // ==============================
+
+    async function loadMatches() {
+
+        const list =
+            document.getElementById(
+                "matchesList"
+            );
+
+
+        /*
+           На поточній головній сторінці
+           такого блоку немає.
+
+           Тому просто пропускаємо.
+        */
+
+        if (!list) {
+            return;
+        }
+
+
+        try {
+
+            const {
+                data: matches,
+                error
+            } =
+                await supabaseClient
+
+                    .from("matches")
+
+                    .select("*")
+
+                    .order(
+                        "created_at",
+                        {
+                            ascending: false
+                        }
+                    )
+
+                    .limit(3);
+
+
+            if (error) {
+
+                console.error(
+                    "Помилка завантаження матчів:",
+                    error
+                );
+
+                return;
+            }
+
+
+            list.innerHTML = "";
+
+
+            if (
+                !matches ||
+                matches.length === 0
+            ) {
+
+                list.innerHTML = `
+
+                    <div class="empty">
+                        Матчів поки немає
+                    </div>
+
+                `;
+
+                return;
+            }
+
+
+            const teamIds = [
+
+                ...new Set(
+
+                    matches.flatMap(
+                        match => [
+
+                            match.team1_id,
+                            match.team2_id
+
+                        ].filter(Boolean)
+                    )
+
+                )
+
+            ];
+
+
+            let teamsMap = {};
+
+
+            if (
+                teamIds.length > 0
+            ) {
+
+                const {
+                    data: teams
+                } =
+                    await supabaseClient
+
+                        .from("teams")
+
+                        .select("id,name")
+
+                        .in(
+                            "id",
+                            teamIds
+                        );
+
+
+                if (teams) {
+
+                    teams.forEach(
+                        team => {
+
+                            teamsMap[
+                                team.id
+                            ] =
+                                team.name;
+
+                        }
+                    );
+
+                }
+
+            }
+
+
+            matches.forEach(
+                match => {
+
+                    const status =
+                        String(
+                            match.status ||
+                            "scheduled"
+                        )
+                        .toLowerCase();
+
+
+                    let statusText =
+                        "UPCOMING";
+
+
+                    if (
+                        status === "live"
+                    ) {
+
+                        statusText =
+                            "LIVE";
+
+                    }
+
+
+                    if (
+                        status === "finished"
+                    ) {
+
+                        statusText =
+                            "FINAL";
+
+                    }
+
+
+                    const statusClass =
+                        status === "live"
+                            ? "live-status"
+                            : "";
+
+
+                    const team1 =
+                        teamsMap[
+                            match.team1_id
+                        ] ||
+                        "Команда 1";
+
+
+                    const team2 =
+                        teamsMap[
+                            match.team2_id
+                        ] ||
+                        "Команда 2";
+
+
+                    const score1 =
+                        match.team1_score ?? 0;
+
+
+                    const score2 =
+                        match.team2_score ?? 0;
+
+
+                    const matchDiv =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    matchDiv.className =
+                        "match";
+
+
+                    matchDiv.innerHTML = `
+
+                        <div
+                            class="match-status ${statusClass}"
+                        >
+                            <span>
+                                ${escapeHTML(
+                                    statusText
+                                )}
+                            </span>
+                        </div>
+
+
+                        <div class="team">
+
+                            <span class="team-logo">
+                                ${escapeHTML(
+                                    team1.charAt(0)
+                                )}
+                            </span>
+
+
+                            <strong>
+                                ${escapeHTML(
+                                    team1
+                                )}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="score">
+
+                            ${
+                                status === "scheduled"
+                                    ? "VS"
+                                    : `${escapeHTML(
+                                        score1
+                                    )} : ${escapeHTML(
+                                        score2
+                                    )}`
+                            }
+
+                        </div>
+
+
+                        <div class="team">
+
+                            <span class="team-logo">
+                                ${escapeHTML(
+                                    team2.charAt(0)
+                                )}
+                            </span>
+
+
+                            <strong>
+                                ${escapeHTML(
+                                    team2
+                                )}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="match-map">
+
+                            ${
+                                match.match_time
+                                    ? escapeHTML(
+                                        match.match_time
+                                    )
+                                    : escapeHTML(
+                                        match.round ||
+                                        "CS2"
+                                    )
+                            }
+
+                        </div>
+
+                    `;
+
+
+                    list.appendChild(
+                        matchDiv
+                    );
+
+                }
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Помилка завантаження матчів:",
+                error
+            );
+
+        }
+
+    }
+
+
+    // ==============================
+    // HERO TOURNAMENT
+    // ==============================
+
+    async function loadHeroTournament() {
+
+        const heroCard =
+            document.getElementById(
+                "heroTournamentCard"
+            );
+
+
+        try {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+
+                    .from("tournaments")
+
+                    .select("*")
+
+                    .order(
+                        "created_at",
+                        {
+                            ascending: false
+                        }
+                    )
+
+                    .limit(1);
+
+
+            /*
+               Якщо виникла помилка
+               або турнірів немає —
+               hero-картка приховується.
+            */
+
+            if (
+                error ||
+                !data ||
+                data.length === 0
+            ) {
+
+                if (heroCard) {
+
+                    heroCard.style.display =
+                        "none";
+
+                }
+
+
+                const prizeStat =
+                    document.getElementById(
+                        "prizeStat"
+                    );
+
+
+                if (prizeStat) {
+
+                    prizeStat.textContent =
+                        "—";
+
+                }
+
+
+                return;
+            }
+
+
+            /*
+               Турнір знайдено.
+            */
+
+            if (heroCard) {
+
+                heroCard.style.display =
+                    "";
+
+            }
+
+
+            const tournament =
+                data[0];
+
+
+            document.getElementById(
+                "heroTournamentName"
+            ).textContent =
+                tournament.name ||
+                "Без назви";
+
+
+            document.getElementById(
+                "heroPrize"
+            ).textContent =
+                tournament.prize ||
+                "—";
+
+
+            /*
+               Максимальна кількість команд
+            */
+
+            const maxTeams =
+                Number(
+                    tournament.teams_count || 8
+                );
+
+
+            /*
+               Реальна кількість команд
+               у цьому турнірі
+            */
+
+            const {
+                count: registeredTeams,
+                error: teamsError
+            } =
+                await supabaseClient
+
+                    .from("teams")
+
+                    .select(
+                        "id",
+                        {
+                            count: "exact",
+                            head: true
+                        }
+                    )
+
+                    .eq(
+                        "tournament_id",
+                        tournament.id
+                    );
+
+
+            const currentTeams =
+                (
+                    !teamsError &&
+                    registeredTeams !== null
+                )
+                    ? Number(
+                        registeredTeams
+                    )
+                    : 0;
+
+
+            document.getElementById(
+                "heroTeams"
+            ).textContent =
+                `${currentTeams} / ${maxTeams}`;
+
+
+            /*
+               Прогрес набору команд
+            */
+
+            const percentage =
+                maxTeams > 0
+
+                    ? Math.min(
+                        100,
+                        Math.round(
+                            (
+                                currentTeams /
+                                maxTeams
+                            ) * 100
+                        )
+                    )
+
+                    : 0;
+
+
+            document.getElementById(
+                "heroProgress"
+            ).style.width =
+                `${percentage}%`;
+
+
+            /*
+               Статус
+            */
+
+            const status =
+                String(
+                    tournament.status ||
+                    "soon"
+                )
+                .toLowerCase()
+                .trim();
+
+
+            const statusElement =
+                document.getElementById(
+                    "heroTournamentStatus"
+                );
+
+
+            if (
+                status === "finished"
+            ) {
+
+                statusElement.textContent =
+                    "● FINISHED";
+
+            } else if (
+                status === "live"
+            ) {
+
+                statusElement.textContent =
+                    "● LIVE";
+
+            } else {
+
+                statusElement.textContent =
+                    "● SOON";
+
+            }
+
+
+            /*
+               Посилання
+            */
+
+            document.getElementById(
+                "heroTournamentLink"
+            ).href =
+                `tournament.html?id=${encodeURIComponent(
+                    tournament.id
+                )}`;
+
+
+            /*
+               Призовий фонд у статистиці
+            */
+
+            const prizeStat =
+                document.getElementById(
+                    "prizeStat"
+                );
+
+
+            if (prizeStat) {
+
+                prizeStat.textContent =
+                    tournament.prize ||
+                    "—";
+
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                "Помилка завантаження головного турніру:",
+                error
+            );
+
+
+            if (heroCard) {
+
+                heroCard.style.display =
+                    "none";
+
+            }
+
+
+            const prizeStat =
+                document.getElementById(
+                    "prizeStat"
+                );
+
+
+            if (prizeStat) {
+
+                prizeStat.textContent =
+                    "—";
+
+            }
+
+        }
+
+    }
+
+
+    // ==============================
+    // START
+    // ==============================
+
+    async function loadHomePage() {
+
+        await Promise.all([
+
+            loadStats(),
+
+            loadTournaments(),
+
+            loadMatches(),
+
+            loadHeroTournament()
+
+        ]);
+
+    }
+
+
+    loadHomePage();
+
+</script>
+
+</body>
+</html>

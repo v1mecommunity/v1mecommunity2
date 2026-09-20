@@ -1,0 +1,1579 @@
+```html
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>V1ME CUP #1 — V1ME Community</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css">
+
+
+    <style>
+
+        /* =========================
+           TOURNAMENT PAGE
+        ========================= */
+
+        .tournament-page {
+            padding: 70px 0 100px;
+        }
+
+
+        /* =========================
+           TOURNAMENT HEADER
+        ========================= */
+
+        .tournament-header {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 40px;
+
+            margin-bottom: 45px;
+
+            padding: 35px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 14px;
+
+            background:
+                radial-gradient(
+                    circle at 80% 50%,
+                    rgba(124,60,255,0.15),
+                    transparent 45%
+                ),
+                var(--card);
+        }
+
+
+        .tournament-title {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 10px;
+
+        }
+
+
+        .tournament-title .live-label {
+
+            width: fit-content;
+
+            padding: 6px 10px;
+
+            border-radius: 5px;
+
+            color: var(--green);
+
+            background:
+                rgba(53,229,139,0.08);
+
+            border:
+                1px solid
+                rgba(53,229,139,0.2);
+
+            font-size: 9px;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+
+        }
+
+
+        .tournament-title h1 {
+
+            font-size: clamp(35px,5vw,58px);
+
+            line-height: 1;
+
+            letter-spacing: -2px;
+
+        }
+
+
+        .tournament-title p {
+
+            color: var(--text-secondary);
+
+            font-size: 12px;
+
+        }
+
+
+        .tournament-stats {
+
+            display: flex;
+
+            gap: 35px;
+
+        }
+
+
+        .t-stat {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 4px;
+
+        }
+
+
+        .t-stat small {
+
+            color: var(--text-dark);
+
+            font-size: 8px;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+
+        }
+
+
+        .t-stat strong {
+
+            font-size: 20px;
+
+        }
+
+
+        /* =========================
+           TABS
+        ========================= */
+
+        .tournament-tabs {
+
+            display: flex;
+
+            gap: 5px;
+
+            margin-bottom: 25px;
+
+            border-bottom:
+                1px solid var(--border);
+
+        }
+
+
+        .tournament-tab {
+
+            padding: 12px 18px;
+
+            border: none;
+
+            background: transparent;
+
+            color: var(--text-secondary);
+
+            font-family: inherit;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            position: relative;
+
+        }
+
+
+        .tournament-tab.active {
+
+            color: white;
+
+        }
+
+
+        .tournament-tab.active::after {
+
+            content: '';
+
+            position: absolute;
+
+            left: 0;
+
+            right: 0;
+
+            bottom: -1px;
+
+            height: 2px;
+
+            background: var(--accent);
+
+            box-shadow:
+                0 0 12px var(--accent);
+
+        }
+
+
+        /* =========================
+           BRACKET
+        ========================= */
+
+        .bracket-wrapper {
+
+            overflow-x: auto;
+
+            padding-bottom: 20px;
+
+        }
+
+
+        .bracket {
+
+            min-width: 1000px;
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr 1fr;
+
+            gap: 70px;
+
+            align-items: center;
+
+            min-height: 620px;
+
+        }
+
+
+        .round {
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: space-around;
+
+            height: 100%;
+
+            gap: 20px;
+
+        }
+
+
+        .round-title {
+
+            margin-bottom: 10px;
+
+            color: var(--text-secondary);
+
+            font-size: 9px;
+
+            font-weight: 800;
+
+            letter-spacing: 2px;
+
+            text-align: center;
+
+        }
+
+
+        /* =========================
+           MATCH CARD
+        ========================= */
+
+        .bracket-match {
+
+            position: relative;
+
+            width: 230px;
+
+            margin: 0 auto;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 8px;
+
+            overflow: hidden;
+
+            background: var(--card);
+
+            transition: 0.25s ease;
+
+        }
+
+
+        .bracket-match:hover {
+
+            transform: translateY(-3px);
+
+            border-color:
+                rgba(124,60,255,0.4);
+
+            box-shadow:
+                0 10px 30px
+                rgba(0,0,0,0.25);
+
+        }
+
+
+        .bracket-match.live-match {
+
+            border-color:
+                rgba(53,229,139,0.35);
+
+        }
+
+
+        .bracket-team {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 10px;
+
+            min-height: 42px;
+
+            padding: 0 12px;
+
+            border-bottom:
+                1px solid var(--border);
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+        }
+
+
+        .bracket-team:last-child {
+
+            border-bottom: none;
+
+        }
+
+
+        .bracket-team.winner {
+
+            background:
+                rgba(124,60,255,0.09);
+
+        }
+
+
+        .team-left {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+        }
+
+
+        .mini-logo {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            width: 25px;
+
+            height: 25px;
+
+            border-radius: 5px;
+
+            background:
+                rgba(124,60,255,0.12);
+
+            color: var(--accent-light);
+
+            font-size: 7px;
+
+            font-weight: 900;
+
+        }
+
+
+        .team-score {
+
+            font-size: 12px;
+
+        }
+
+
+        .winner .team-score {
+
+            color: var(--accent-light);
+
+        }
+
+
+        .match-info {
+
+            padding: 5px 10px;
+
+            background:
+                rgba(0,0,0,0.2);
+
+            color: var(--text-dark);
+
+            text-align: center;
+
+            font-size: 7px;
+
+            font-weight: 700;
+
+        }
+
+
+        .live-match .match-info {
+
+            color: var(--green);
+
+        }
+
+
+        /* =========================
+           CONNECTORS
+        ========================= */
+
+        .round:not(:last-child)
+        .bracket-match::after {
+
+            content: '';
+
+            position: absolute;
+
+            top: 50%;
+
+            right: -70px;
+
+            width: 70px;
+
+            height: 1px;
+
+            background:
+                rgba(255,255,255,0.12);
+
+        }
+
+
+        /* =========================
+           MATCHES LIST
+        ========================= */
+
+        .matches-panel {
+
+            display: none;
+
+        }
+
+
+        .matches-panel.active {
+
+            display: block;
+
+        }
+
+
+        .match-list {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+
+        }
+
+
+        .match-row {
+
+            display: grid;
+
+            grid-template-columns:
+                100px 1fr 100px;
+
+            align-items: center;
+
+            gap: 20px;
+
+            min-height: 70px;
+
+            padding: 10px 20px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 8px;
+
+            background: var(--card);
+
+        }
+
+
+        .match-row-status {
+
+            color: var(--text-secondary);
+
+            font-size: 8px;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+
+        }
+
+
+        .match-row-status.live {
+
+            color: var(--green);
+
+        }
+
+
+        .match-teams {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 20px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+        }
+
+
+        .match-score {
+
+            font-size: 17px;
+
+            font-weight: 900;
+
+        }
+
+
+        .match-time {
+
+            color: var(--text-secondary);
+
+            text-align: right;
+
+            font-size: 9px;
+
+        }
+
+
+        /* =========================
+           INFORMATION
+        ========================= */
+
+        .info-panel {
+
+            display: none;
+
+        }
+
+
+        .info-panel.active {
+
+            display: block;
+
+        }
+
+
+        .info-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2,1fr);
+
+            gap: 15px;
+
+        }
+
+
+        .info-card {
+
+            padding: 25px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 10px;
+
+            background: var(--card);
+
+        }
+
+
+        .info-card h3 {
+
+            margin-bottom: 12px;
+
+            font-size: 15px;
+
+        }
+
+
+        .info-card p {
+
+            color: var(--text-secondary);
+
+            font-size: 11px;
+
+            line-height: 1.8;
+
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media(max-width:800px) {
+
+            .tournament-header {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+            }
+
+
+            .tournament-stats {
+
+                width: 100%;
+
+                justify-content: space-between;
+
+            }
+
+
+            .info-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .match-row {
+
+                grid-template-columns:
+                    70px 1fr 60px;
+
+                gap: 10px;
+
+            }
+
+
+            .match-teams {
+
+                gap: 8px;
+
+                font-size: 9px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="header">
+
+    <div class="container header-content">
+
+        <a href="index.html" class="logo">
+
+            <span>
+                V1ME
+            </span>
+
+            <small>
+                COMMUNITY
+            </small>
+
+        </a>
+
+
+        <nav class="nav">
+
+            <a href="index.html">
+                ← Головна
+            </a>
+
+        </nav>
+
+
+        <a
+            href="https://discord.gg/7t8vAnn3n"
+            class="discord-button"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            Discord
+        </a>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main>
+
+<section class="tournament-page">
+
+<div class="container">
+
+
+<!-- =========================
+     TOURNAMENT HEADER
+========================= -->
+
+<div class="tournament-header">
+
+
+    <div class="tournament-title">
+
+        <span class="live-label">
+            ● LIVE TOURNAMENT
+        </span>
+
+        <h1>
+            V1ME CUP #1
+        </h1>
+
+        <p>
+            Counter-Strike 2 • Single Elimination • 5v5
+        </p>
+
+    </div>
+
+
+    <div class="tournament-stats">
+
+
+        <div class="t-stat">
+
+            <small>
+                PRIZE POOL
+            </small>
+
+            <strong>
+                500 ₴
+            </strong>
+
+        </div>
+
+
+        <div class="t-stat">
+
+            <small>
+                TEAMS
+            </small>
+
+            <strong>
+                8
+            </strong>
+
+        </div>
+
+
+        <div class="t-stat">
+
+            <small>
+                DATE
+            </small>
+
+            <strong>
+                18.09
+            </strong>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     TABS
+========================= -->
+
+<div class="tournament-tabs">
+
+
+    <button
+        class="tournament-tab active"
+        data-tab="bracket">
+
+        Турнірна сітка
+
+    </button>
+
+
+    <button
+        class="tournament-tab"
+        data-tab="matches">
+
+        Матчі
+
+    </button>
+
+
+    <button
+        class="tournament-tab"
+        data-tab="info">
+
+        Інформація
+
+    </button>
+
+
+</div>
+
+
+
+<!-- =========================
+     BRACKET
+========================= -->
+
+<div
+    class="matches-panel active"
+    id="bracket">
+
+
+<div class="bracket-wrapper">
+
+
+<div class="bracket">
+
+
+<!-- QUARTERFINALS -->
+
+<div class="round">
+
+<div class="round-title">
+    QUARTERFINALS
+</div>
+
+
+<div class="bracket-match">
+
+    <div class="bracket-team winner">
+
+        <div class="team-left">
+
+            <span class="mini-logo">
+                SH
+            </span>
+
+            SavageHawks
+
+        </div>
+
+        <span class="team-score">
+            13
+        </span>
+
+    </div>
+
+
+    <div class="bracket-team">
+
+        <div class="team-left">
+
+            <span class="mini-logo">
+                BP
+            </span>
+
+            Blaze Purple
+
+        </div>
+
+        <span class="team-score">
+            8
+        </span>
+
+    </div>
+
+
+    <div class="match-info">
+        FINAL • MIRAGE
+    </div>
+
+</div>
+
+
+
+<div class="bracket-match">
+
+    <div class="bracket-team winner">
+
+        <div class="team-left">
+
+            <span class="mini-logo">
+                PX
+            </span>
+
+            PARADOX
+
+        </div>
+
+        <span class="team-score">
+            13
+        </span>
+
+    </div>
+
+
+    <div class="bracket-team">
+
+        <div class="team-left">
+
+            <span class="mini-logo">
+                NJ
+            </span>
+
+            Natus Junior
+
+        </div>
+
+        <span class="team-score">
+            5
+        </span>
+
+    </div>
+
+
+    <div class="match-info">
+        FINAL • INFERNO
+    </div>
+
+</div>
+
+
+
+<div class="bracket-match">
+
+    <div class="bracket-team winner">
+
+        <div class="team-left">
+
+            <span class="mini-logo">
+                NX
+            </span>
+
+            Nexus
+
+        </div>
+
+        <span class="team-score">
+            13
+        </span>
+
+    </div>
+
+
+    <div class="bracket-team">
+
+        <div class="team-left">
+
+            <span class="mini-logo">
+                PNR
+            </span>
+
+            Point No Return
+
+        </div>
+
+        <span class="team-score">
+            7
+        </span>
+
+    </div>
+
+
+    <div class="match-info">
+        FINAL • ANUBIS
+    </div>
+
+</div>
+
+
+
+<div class="bracket-match">
+
+    <div class="bracket-team">
+
+        <div class="team-left">
+
+            <span class="mini-logo">
+                KT
+            </span>
+
+            Kairo Team
+
+        </div>
+
+        <span class="team-score">
+            6
+        </span>
+
+    </div>
+
+
+    <div class="bracket-team winner">
+
+        <div class="team-left">
+
+            <span class="mini-logo">
+                BL
+            </span>
+
+            Blaze
+
+        </div>
+
+        <span class="team-score">
+            13
+        </span>
+
+    </div>
+
+
+    <div class="match-info">
+        FINAL • NUKE
+    </div>
+
+</div>
+
+</div>
+
+
+
+<!-- SEMIFINALS -->
+
+<div class="round">
+
+<div class="round-title">
+    SEMIFINALS
+</div>
+
+
+<div class="bracket-match">
+
+    <div class="bracket-team winner">
+
+        <div class="team-left">
+
+            <span class="mini-logo">
+                SH
+            </span>
+
+            SavageHawks
+
+        </div>
+
+        <span class="team-score">
+            13
+        </span>
+
+    </div>
+
+
+    <div class="bracket-team">
+
+        <div class="team-left">
+
+            <span class="mini-logo">
+                PX
+            </span>
+
+            PARADOX
+
+        </div>
+
+        <span class="team-score">
+            11
+        </span>
+
+    </div>
+
+
+    <div class="match-info">
+        FINAL • MIRAGE
+    </div>
+
+</div>
+
+
+
+<div class="bracket-match live-match">
+
+    <div class="bracket-team winner">
+
+        <div class="team-left">
+
+            <span class="mini-logo">
+                NX
+            </span>
+
+            Nexus
+
+        </div>
+
+        <span class="team-score">
+            7
+        </span>
+
+    </div>
+
+
+    <div class="bracket-team">
+
+        <div class="team-left">
+
+            <span class="mini-logo">
+                BL
+            </span>
+
+            Blaze
+
+        </div>
+
+        <span class="team-score">
+            6
+        </span>
+
+    </div>
+
+
+    <div class="match-info">
+        ● LIVE • INFERNO
+    </div>
+
+</div>
+
+</div>
+
+
+
+<!-- FINAL -->
+
+<div class="round">
+
+<div class="round-title">
+    GRAND FINAL
+</div>
+
+
+<div class="bracket-match">
+
+    <div class="bracket-team">
+
+        <div class="team-left">
+
+            <span class="mini-logo">
+                SH
+            </span>
+
+            SavageHawks
+
+        </div>
+
+        <span class="team-score">
+            —
+        </span>
+
+    </div>
+
+
+    <div class="bracket-team">
+
+        <div class="team-left">
+
+            <span class="mini-logo">
+                TBD
+            </span>
+
+            TBD
+
+        </div>
+
+        <span class="team-score">
+            —
+        </span>
+
+    </div>
+
+
+    <div class="match-info">
+        UPCOMING • 19:00
+    </div>
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- =========================
+     MATCHES
+========================= -->
+
+<div
+    class="matches-panel"
+    id="matches">
+
+
+<div class="match-list">
+
+
+<div class="match-row">
+
+    <div class="match-row-status">
+        FINAL
+    </div>
+
+    <div class="match-teams">
+
+        SavageHawks
+
+        <span class="match-score">
+            13 : 8
+        </span>
+
+        Blaze Purple
+
+    </div>
+
+    <div class="match-time">
+        Mirage
+    </div>
+
+</div>
+
+
+
+<div class="match-row">
+
+    <div class="match-row-status live">
+        ● LIVE
+    </div>
+
+    <div class="match-teams">
+
+        Nexus
+
+        <span class="match-score">
+            7 : 6
+        </span>
+
+        Blaze
+
+    </div>
+
+    <div class="match-time">
+        Inferno
+    </div>
+
+</div>
+
+
+
+<div class="match-row">
+
+    <div class="match-row-status">
+        UPCOMING
+    </div>
+
+    <div class="match-teams">
+
+        SavageHawks
+
+        <span class="match-score">
+            VS
+        </span>
+
+        TBD
+
+    </div>
+
+    <div class="match-time">
+        19:00
+    </div>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+
+<!-- =========================
+     INFO
+========================= -->
+
+<div
+    class="info-panel"
+    id="info">
+
+
+<div class="info-grid">
+
+
+<div class="info-card">
+
+    <h3>
+        Про турнір
+    </h3>
+
+    <p>
+        V1ME CUP #1 — перший великий турнір
+        V1ME Community з Counter-Strike 2.
+        У турнірі беруть участь 8 команд.
+        Формат — Single Elimination.
+    </p>
+
+</div>
+
+
+<div class="info-card">
+
+    <h3>
+        Формат
+    </h3>
+
+    <p>
+        Усі матчі проходять у форматі 5v5.
+        Команда, яка програла матч,
+        вибуває з турніру.
+        Переможець проходить у наступний раунд.
+    </p>
+
+</div>
+
+
+<div class="info-card">
+
+    <h3>
+        Призовий фонд
+    </h3>
+
+    <p>
+        Загальний призовий фонд турніру —
+        500 ₴.
+        Розподіл призів визначається
+        організаторами турніру.
+    </p>
+
+</div>
+
+
+<div class="info-card">
+
+    <h3>
+        Правила
+    </h3>
+
+    <p>
+        Учасники повинні дотримуватися
+        правил V1ME Community та
+        загальних правил чесної гри.
+    </p>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+</div>
+
+</section>
+
+</main>
+
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="footer">
+
+<div class="container footer-content">
+
+
+<div class="logo">
+
+    <span>
+        V1ME
+    </span>
+
+    <small>
+        COMMUNITY
+    </small>
+
+</div>
+
+
+<p>
+    © 2026 V1ME Community.
+    All rights reserved.
+</p>
+
+
+<div class="footer-links">
+
+    <a href="#">
+        Discord
+    </a>
+
+    <a href="#">
+        YouTube
+    </a>
+
+    <a href="#">
+        Rules
+    </a>
+
+</div>
+
+
+</div>
+
+</footer>
+
+
+
+<!-- =========================
+     TAB JAVASCRIPT
+========================= -->
+
+<script>
+
+const tabs =
+    document.querySelectorAll('.tournament-tab');
+
+const panels =
+    document.querySelectorAll(
+        '.matches-panel, .info-panel'
+    );
+
+
+tabs.forEach(tab => {
+
+    tab.addEventListener('click', () => {
+
+
+        /*
+         * Remove active state
+         */
+
+        tabs.forEach(item => {
+
+            item.classList.remove('active');
+
+        });
+
+
+        /*
+         * Activate selected tab
+         */
+
+        tab.classList.add('active');
+
+
+        /*
+         * Hide all panels
+         */
+
+        panels.forEach(panel => {
+
+            panel.classList.remove('active');
+
+        });
+
+
+        /*
+         * Show selected panel
+         */
+
+        const selected =
+            document.getElementById(
+                tab.dataset.tab
+            );
+
+
+        if (selected) {
+
+            selected.classList.add('active');
+
+        }
+
+    });
+
+});
+
+</script>
+
+
+</body>
+
+</html>
+```
