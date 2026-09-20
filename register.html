@@ -749,21 +749,18 @@ async function submitRegistration(event) {
     // ПОМИЛКА
     // ======================================
 
-    if (error) {
+   if (error) {
 
-        console.error(
-            "Помилка створення заявки:",
-            error
-        );
+    console.error("ПОВНА ПОМИЛКА SUPABASE:", error);
 
-        errorMessage.textContent =
-            "❌ Не вдалося відправити заявку. Спробуй ще раз.";
+    errorMessage.textContent =
+        `❌ ${error.message || "Невідома помилка"}`;
 
-        errorMessage.style.display =
-            "block";
+    errorMessage.style.display =
+        "block";
 
-        return;
-    }
+    return;
+}
 
 
     // ======================================
